@@ -1,148 +1,141 @@
-// src/components/layout/Header.jsx
-import { useState } from "react";
-import { Gamepad2, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, Menu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
-  // Fungsi untuk menangani klik tautan dan scroll ke ID
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["home", "about", "projects", "skills", "contact"];
+      const scrollPosition = window.scrollY;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetHeight = element.offsetHeight;
+          if (
+            scrollPosition >= offsetTop - 150 &&
+            scrollPosition < offsetTop + offsetHeight - 150
+          ) {
+            setActiveSection(section);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleClick = (e, href) => {
     e.preventDefault();
-
-    if (!href.startsWith("#")) {
-      window.location.href = href;
-      return;
-    }
-
-    const targetId = href.substring(1); // Hilangkan tanda #
+    const targetId = href.substring(1);
     const targetElement = document.getElementById(targetId);
 
     if (targetElement) {
       targetElement.scrollIntoView({
         behavior: "smooth",
-        block: "start", // Bisa juga 'center' atau 'end'
+        block: "start",
       });
-      // Tutup menu mobile setelah klik (jika perlu)
-      if (menuOpen) {
-        closeMenu();
-      }
+      if (menuOpen) closeMenu();
     }
   };
 
+  const navLinks = [
+    { name: "HOME", href: "#home" },
+    { name: "ABOUT", href: "#about" },
+    { name: "PROJECTS", href: "#projects" },
+    { name: "SKILLS", href: "#skills" },
+    { name: "CONTACT", href: "#contact" },
+  ];
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/40 backdrop-blur-xl border-b border-cyan-500/30 shadow-[0_0_15px_rgba(0,255,255,0.15)] transition-all duration-500 animate-fade-in-up">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer group">
-            <div className="p-2 bg-cyan-500/10 rounded-xl border border-cyan-500/50 group-hover:border-cyan-300 group-hover:shadow-[0_0_12px_rgba(0,255,255,0.4)] transition-all duration-300">
-              <Gamepad2 className="w-6 h-6 text-cyan-400 group-hover:text-cyan-300 group-hover:scale-110 transition-all duration-300" />
-            </div>
-            <span className="font-pixel text-lg text-cyan-400 group-hover:text-cyan-100 tracking-widest transition-colors duration-300">
-              ARIELLYA
+    <header className="fixed top-0 left-0 right-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-[#F5E6CA]/50 transition-all duration-300">
+      <div className="container mx-auto px-6 py-5 flex items-center justify-between">
+        
+        {/* Logo Minimalis (Inisial A.P) */}
+        <div 
+          className="flex items-center cursor-pointer group" 
+          onClick={(e) => handleClick(e, "#home")}
+        >
+          <div className="relative">
+            <span className="font-['Playfair_Display'] font-bold text-2xl text-[#4A332C] tracking-tighter">
+              A<span className="text-[#A1887F]">.</span>P
             </span>
+            {/* Dekorasi garis kecil di bawah logo */}
+            <div className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#4A332C] group-hover:w-full transition-all duration-500"></div>
           </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-3">
-            <a
-              href="#home"
-              onClick={(e) => handleClick(e, "#home")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm"
-            >
-              HOME
-            </a>
-            <a
-              href="#about"
-              onClick={(e) => handleClick(e, "#about")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm"
-            >
-              ABOUT
-            </a>
-            <a
-              href="#projects"
-              onClick={(e) => handleClick(e, "#projects")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm"
-            >
-              PROJECTS
-            </a>
-            <a
-              href="#skills"
-              onClick={(e) => handleClick(e, "#skills")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm"
-            >
-              SKILLS
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => handleClick(e, "#contact")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm"
-            >
-              CONTACT
-            </a>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 text-cyan-400 hover:text-cyan-300 hover:scale-110 transition-colors duration-300"
-          >
-            {menuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <>
-                <div className="w-6 h-0.5 bg-current mb-1.5 transition-all duration-300"></div>
-                <div className="w-6 h-0.5 bg-current mb-1.5 transition-all duration-300"></div>
-                <div className="w-6 h-0.5 bg-current transition-all duration-300"></div>
-              </>
-            )}
-          </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {menuOpen && (
-          <nav className="md:hidden mt-4 flex flex-col items-center gap-4 border-t border-cyan-500/20 pt-4 animate-fade-in">
-            <a
-              href="#home"
-              onClick={(e) => handleClick(e, "#home")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm w-full text-center"
-            >
-              HOME
-            </a>
-            <a
-              href="#about"
-              onClick={(e) => handleClick(e, "#about")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm w-full text-center"
-            >
-              ABOUT
-            </a>
-            <a
-              href="#projects"
-              onClick={(e) => handleClick(e, "#projects")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm w-full text-center"
-            >
-              PROJECTS
-            </a>
-            <a
-              href="#skills"
-              onClick={(e) => handleClick(e, "#skills")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm w-full text-center"
-            >
-              SKILLS
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => handleClick(e, "#contact")}
-              className="text-gray-300 hover:text-cyan-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.5)] transition-all duration-300 px-3 py-1 rounded font-pixel text-sm w-full text-center"
-            >
-              CONTACT
-            </a>
-          </nav>
-        )}
+        {/* Desktop Navigation dengan Framer Motion */}
+        <nav className="hidden md:flex items-center gap-2 relative">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href.substring(1);
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleClick(e, link.href)}
+                className={`relative px-6 py-2 text-[11px] font-bold tracking-[0.2em] transition-colors duration-500 ${
+                  isActive ? "text-[#F5E6CA]" : "text-[#8D6E63] hover:text-[#4A332C]"
+                }`}
+              >
+                {/* Indikator Aktif (Kapsul yang meluncur) */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute inset-0 bg-[#4A332C] rounded-full -z-10"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+                {link.name}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden p-2 text-[#4A332C] transition-colors duration-300"
+        >
+          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
+
+      {/* Mobile Navigation Dropdown */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-[#F5E6CA]/50 shadow-xl px-6 py-8 flex flex-col gap-4"
+          >
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href.substring(1);
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleClick(e, link.href)}
+                  className={`text-center text-xs font-bold tracking-[0.3em] py-3 transition-all ${
+                    isActive ? "text-[#4A332C] scale-110" : "text-[#A1887F]"
+                  }`}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

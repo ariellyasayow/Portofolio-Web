@@ -1,48 +1,84 @@
-// src/components/layout/Footer.jsx
-import { Heart } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-export const Footer = ({ }) => {
+// NAMA DIGANTI DARI Contact KE Footer AGAR MATCH DENGAN RestAPI.jsx
+export const Footer = ({ contactData }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
+  }, []);
+
+  // Karena di RestAPI.jsx kamu memanggil <Footer /> tanpa props, 
+  // kita beri proteksi agar tidak error jika contactData kosong
+  const email = contactData?.email || "sayowariellya@gmail.com";
+  const github = contactData?.social?.github || "https://github.com/ariellya";
+  const linkedin = contactData?.social?.linkedin || "https://www.linkedin.com/in/ariellya-sayow-108419355";
 
   return (
-    <footer className="relative bg-[#0a0a0f] border-t border-cyan-500/30 py-14 overflow-hidden">
-      {/* Efek cahaya di background */}
-      <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/10 via-transparent to-transparent blur-3xl"></div>
+    <section 
+      id="contact" 
+      ref={sectionRef} 
+      className="py-32 bg-[#4A332C] text-[#F5E6CA] font-['Poppins',sans-serif] overflow-hidden"
+    >
+      <div className="container mx-auto px-6 max-w-6xl">
+        
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          
+          <div className={`transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h2 className="text-5xl md:text-7xl font-['Playfair_Display',serif] font-bold leading-tight mb-8">
+              Let’s create <br />
+              <span className="italic font-light text-[#A1887F]">something</span> iconic.
+            </h2>
+            <div className="w-24 h-[1px] bg-[#A1887F] mb-8"></div>
+            <p className="text-[#A1887F] text-lg max-w-md font-light leading-relaxed">
+              I am always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+            </p>
+          </div>
 
-      <div className="relative container mx-auto px-6 flex flex-col items-center gap-8 text-center">
-        {/* Divider pixel glow dengan animasi */}
-        <div className="w-full max-w-md animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-          <div className="h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent shadow-[0_0_15px_rgba(0,255,255,0.5)]"></div>
-          <div className="flex justify-center gap-2 mt-2">
-            <div className="w-2 h-2 bg-cyan-400 rounded-sm shadow-[0_0_6px_rgba(0,255,255,0.8)] animate-pulse"></div>
-            <div className="w-2 h-2 bg-pink-500 rounded-sm shadow-[0_0_6px_rgba(255,0,255,0.8)] animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-2 h-2 bg-green-400 rounded-sm shadow-[0_0_6px_rgba(0,255,0,0.8)] animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-            <div className="w-2 h-2 bg-purple-400 rounded-sm shadow-[0_0_6px_rgba(128,0,255,0.8)] animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+          <div className={`space-y-12 transition-all duration-1000 delay-300 transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+            
+            <div className="group">
+              <p className="text-[10px] uppercase tracking-[0.5em] mb-4 text-[#A1887F] font-bold">Direct Inquiry</p>
+              <a 
+                href={`mailto:${email}`} 
+                className="text-2xl md:text-4xl font-['Playfair_Display',serif] hover:italic hover:pl-6 transition-all duration-500 border-b border-[#A1887F]/30 pb-4 block group-hover:border-[#F5E6CA]"
+              >
+                {email}
+              </a>
+            </div>
+
+            <div className="flex flex-wrap gap-12">
+              <div className="group cursor-pointer">
+                <p className="text-[10px] uppercase tracking-[0.5em] mb-3 text-[#A1887F] font-bold">LinkedIn</p>
+                <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-lg font-medium hover:text-white transition-colors block group-hover:italic">
+                  Ariellya Putri
+                </a>
+              </div>
+              <div className="group cursor-pointer">
+                <p className="text-[10px] uppercase tracking-[0.5em] mb-3 text-[#A1887F] font-bold">GitHub</p>
+                <a href={github} target="_blank" rel="noopener noreferrer" className="text-lg font-medium hover:text-white transition-colors block group-hover:italic">
+                  @ariellya
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
 
-
-        {/* Signature dengan animasi */}
-        <div className="flex items-center gap-2 text-gray-400 text-sm animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
-          <span>Front End</span>
-          <Heart
-            className="w-4 h-4 text-pink-500 animate-pulse"
-            fill="currentColor"
-          />
-          <span>by</span>
-          <span className="font-pixel text-xs text-cyan-400 group-hover:text-yellow-300 transition-colors duration-300">ARIELLYA</span>
+        <div className="mt-32 pt-12 border-t border-[#A1887F]/20 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] tracking-widest uppercase opacity-40">
+          <p>© 2026 Ariellya Putri Sayow. All rights reserved.</p>
+          <p className="italic font-['Playfair_Display',serif] lowercase tracking-normal text-sm">designed with a touch of luxury & code.</p>
         </div>
 
-        {/* Tagline dengan animasi dan hover */}
-        <p className="font-retro text-cyan-300/80 text-sm max-w-lg leading-relaxed animate-fade-in-up hover:text-cyan-100 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.3)] transition-all duration-300 cursor-default" style={{ animationDelay: '0.9s' }}>
-          “Where aesthetics meet functionality, great user experiences are born.”
-        </p>
-
-        {/* Copyright dengan animasi */}
-        <p className="text-gray-500 text-xs tracking-wide animate-fade-in-up" style={{ animationDelay: '1s' }}>
-          © {new Date().getFullYear()} Personal Website
-        </p>
       </div>
-    </footer>
+    </section>
   );
 };

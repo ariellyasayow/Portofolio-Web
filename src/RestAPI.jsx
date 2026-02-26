@@ -6,7 +6,7 @@ import { Landing } from "./components/LandingPage/Landing";
 import { About } from "./components/About/About";
 import { Project } from "./components/Project/Project";
 import { Skill } from "./components/SkillPage/Skill";
-import { Contact } from "./components/ContactPage/Contact";
+// TAMBAHKAN IMPORT INI:
 import { Footer } from "./components/Footer/Footer"; 
 
 const API_BASE = "http://localhost:3000"; 
@@ -17,8 +17,6 @@ export default function RestAPI() {
     about: null,
     projects: [],
     skills: [],
-    contact: null,
-    // footer: null, // Tidak diperlukan jika Footer tidak menerima props dari sini
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,14 +24,12 @@ export default function RestAPI() {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        // Ambil data yang diperlukan oleh komponen yang ditampilkan
-        const [heroRes, aboutRes, projectsRes, skillsRes, contactRes] = await Promise.all([
+        // Ambil data dari API
+        const [heroRes, aboutRes, projectsRes, skillsRes] = await Promise.all([
             axios.get(`${API_BASE}/hero`),
             axios.get(`${API_BASE}/about`),
             axios.get(`${API_BASE}/projects`),
             axios.get(`${API_BASE}/skills`),
-            axios.get(`${API_BASE}/contact`),
-            // axios.get(`${API_BASE}/footer`), // Tidak diambil karena Footer tidak menggunakan props dari sini
         ]);
 
         setData({
@@ -41,8 +37,6 @@ export default function RestAPI() {
           about: aboutRes.data || {},
           projects: projectsRes.data || [],
           skills: skillsRes.data || [],
-          contact: contactRes.data || {},
-          // footer: footerRes.data || {}, // Tidak diset karena tidak diambil
         });
       } catch (err) {
         console.error("Failed to load data from API:", err.message);
@@ -57,19 +51,17 @@ export default function RestAPI() {
     fetchAll();
   }, []);
 
-  // Saat masih loading
   if (loading) {
     return (
-      <div className="bg-black text-neon-blue min-h-screen flex items-center justify-center font-mono text-xl">
-        LOADING WORLD...
+      <div className="bg-[#FAFAFA] text-[#4A332C] min-h-screen flex items-center justify-center font-serif text-xl">
+        LOADING COLLECTION...
       </div>
     );
   }
 
-  // Saat error
   if (error) {
     return (
-      <div className="bg-black text-red-500 min-h-screen flex items-center justify-center font-mono text-xl">
+      <div className="bg-white text-red-800 min-h-screen flex items-center justify-center font-mono text-xl">
         {error}
       </div>
     );
@@ -82,7 +74,7 @@ export default function RestAPI() {
       {data.about && <About about={data.about} />}
       <Project projects={data.projects || []} />
       <Skill skills={data.skills || []} />
-      <Contact contactData={data.contact} />
+      {/* Sekarang Footer sudah ter-import dan aman dipanggil */}
       <Footer />
     </>
   );

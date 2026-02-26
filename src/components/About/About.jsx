@@ -1,41 +1,74 @@
-// src/components/pages/AboutPage/About.jsx
+import { motion } from "framer-motion";
 
-export const About = ({ about }) => {
-  if (!about) return null;
-
+export const About = () => {
   return (
     <section
       id="about"
-      className="relative py-24 bg-[#0a0a0f] text-gray-100 overflow-hidden"
+      className="relative py-32 bg-[#FFFFFF] font-['Poppins',sans-serif] overflow-hidden"
     >
-      {/* Efek cahaya background yang lebih dinamis */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* Ornamen Background Estetik (Sangat Tipis) */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[#F5E6CA] rounded-full mix-blend-multiply filter blur-[80px] opacity-30 translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#EFEBE4] rounded-full mix-blend-multiply filter blur-[100px] opacity-40 -translate-x-1/3 translate-y-1/3"></div>
 
-      <div className="relative container mx-auto px-6 text-center">
-        {/* Judul dengan animasi dan efek glow */}
-        <h2 className="text-4xl md:text-5xl font-pixel text-cyan-400 mb-8 tracking-wider drop-shadow-[0_0_10px_rgba(0,255,255,0.5)] animate-fade-in-up">
-          ABOUT <span className="text-purple-400">ME</span>
-        </h2>
+      <div className="relative z-10 container mx-auto px-6 max-w-5xl">
+        <div className="flex flex-col md:flex-row gap-16 md:gap-24 items-start">
+          
+          {/* Bagian Kiri: Heading Minimalis */}
+          <motion.div 
+            className="md:w-2/5"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <h2 className="text-5xl md:text-7xl font-['Playfair_Display',serif] font-bold text-[#4A332C] leading-tight mb-8">
+              A Bit <br />
+              <span className="text-[#A1887F] italic font-light">About</span> Me.
+            </h2>
+            <div className="w-16 h-[2px] bg-[#D7CCC8] mb-8"></div>
+            <p className="text-[#A1887F] text-[10px] uppercase tracking-[0.5em] font-bold">
+              Creative Profile
+            </p>
+          </motion.div>
 
-        {/* Deskripsi dengan efek hover dan animasi */}
-        <p className="text-gray-300 max-w-3xl mx-auto leading-relaxed text-lg mb-6 animate-fade-in-up hover:text-gray-100 hover:drop-shadow-[0_0_8px_rgba(200,200,200,0.3)] transition-all duration-300 cursor-default" style={{ animationDelay: '0.2s' }}>
-          {about.history}
-        </p>
+          {/* Bagian Kanan: Teks Editorial */}
+          <motion.div 
+            className="md:w-3/5"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+          >
+            <div className="space-y-8 text-[#795C53] text-lg md:text-xl font-light leading-relaxed text-justify">
+              
+              {/* Paragraf 1 dengan Drop Cap */}
+              <p>
+                <span className="float-left text-6xl md:text-7xl font-['Playfair_Display',serif] text-[#4A332C] leading-none pr-3 pt-2 font-bold">
+                  H
+                </span>
+                ello! I am currently an Informatics student in my sixth semester at <span className="font-medium text-[#4A332C]">Universitas Klabat</span>. My academic path has fostered a deep focus in <span className="font-medium text-[#4A332C]">UI/UX Design</span>, driven by a passion for creating intuitive interfaces that bridge the gap between human needs and digital solutions.
+              </p>
 
-        {/* Fokus / Highlight dengan efek hover dan animasi */}
-        <p className="text-cyan-300 md:text-xl font-semibold tracking-wide animate-fade-in-up hover:text-cyan-100 hover:scale-105 transition-all duration-300 cursor-default" style={{ animationDelay: '0.3s' }}>
-          My focus is on <span className="text-purple-400 font-bold hover:text-yellow-300 transition-colors duration-300">{about.focus}</span>.
-        </p>
+              {/* Paragraf 2 */}
+              <p>
+                Beyond technical frameworks, I find immense inspiration in the gaming industry. I am particularly captivated by how <span className="font-medium text-[#4A332C]">visual storytelling</span> and <span className="font-medium text-[#4A332C]">immersive graphics</span> can elevate a user's experience—a philosophy I strive to translate into every project I develop.
+              </p>
 
-        {/* Garis bawah efek neon dengan animasi */}
-        <div className="mt-10 h-0.5 w-48 mx-auto bg-gradient-to-r from-transparent via-cyan-500 to-transparent rounded-full shadow-[0_0_15px_rgba(0,255,255,0.6)] animate-fade-in-up" style={{ animationDelay: '0.4s' }}></div>
+              {/* Paragraf Penutup yang Lebih Subtly Professional */}
+              <motion.div 
+                className="pt-6 border-t border-[#F5E6CA]"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <p className="font-['Playfair_Display',serif] italic text-2xl text-[#8D6E63] leading-relaxed">
+                  "Blending aesthetic intuition with logical precision to build meaningful digital experiences."
+                </p>
+              </motion.div>
 
-        {/* Pixel Art Divider tambahan */}
-        <div className="flex justify-center gap-2 mt-10 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-          <div className="w-3 h-3 bg-cyan-400 animate-pulse"></div>
-          <div className="w-3 h-3 bg-purple-400 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-          <div className="w-3 h-3 bg-yellow-400 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>

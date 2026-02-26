@@ -1,77 +1,130 @@
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+
 export const Landing = ({ hero }) => {
+  const [offsetY, setOffsetY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setOffsetY(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   if (!hero) return null;
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-[#0a0a0f] text-gray-100 overflow-hidden pt-20" 
+      className="relative min-h-screen flex items-center bg-[#FAFAFA] overflow-hidden pt-32 pb-20 font-['Poppins',sans-serif]"
     >
-      {/* Efek cahaya & partikel neon */}
-      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-transparent to-transparent blur-3xl"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_30%,rgba(0,255,255,0.08),transparent_70%)]"></div>
-      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_70%,rgba(255,0,255,0.05),transparent_70%)]"></div>
+      {/* Background Parallax Soft Gradients */}
+      <div
+        className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40"
+        style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+      >
+        <div className="absolute top-[-10%] left-[-5%] w-[50vw] h-[50vw] rounded-full bg-[#F5E6CA] blur-[120px]"></div>
+        <div className="absolute bottom-[10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-[#EFEBE4] blur-[100px]"></div>
+      </div>
 
-      <div className="relative container mx-auto px-6 text-center">
-        {/* Avatar dengan animasi */}
-        <div className="mb-10 animate-fade-in-up">
-          <div className="relative inline-block">
-            <img
-              src={hero.avatar}
-              alt={hero.name}
-              className="w-40 h-40 md:w-52 md:h-52 mx-auto rounded-full border-4 border-cyan-400 object-cover shadow-[0_0_20px_rgba(0,255,255,0.3)] transition-transform duration-500 hover:scale-110" // Tambahkan hover:scale
-            />
-            <div className="absolute inset-0 rounded-full border border-cyan-400/30 animate-ping opacity-70"></div> {/* Tambahkan opacity */}
-          </div>
-        </div>
-
-        {/* Nama & peran dengan animasi */}
-        <h1 className="text-4xl md:text-6xl font-pixel tracking-widest text-cyan-400 drop-shadow-[0_0_15px_rgba(0,255,255,0.5)] mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          {`HELLO, I'M ${hero.name.toUpperCase()}`}
-        </h1>
-
-        <p className="text-xl md:text-2xl text-gray-300 font-retro mb-6 animate-fade-in-up hover:text-cyan-300 transition-colors duration-300" style={{ animationDelay: '0.2s' }}> {/* Tambahkan hover dan transisi */}
-          {hero.role}
-        </p>
-
-        {/* Bio dengan animasi */}
-        <p className="max-w-2xl mx-auto text-gray-400 text-base md:text-lg leading-relaxed animate-fade-in-up hover:text-gray-200 transition-colors duration-300 cursor-default" style={{ animationDelay: '0.3s' }}> {/* Tambahkan hover dan transisi */}
-          {hero.bio}
-        </p>
-
-        {/* Tombol CTA dengan animasi */}
-        <div className="mt-10 flex justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          <a
-            href="#projects"
-            className="px-6 py-3 border border-cyan-400 text-cyan-300 font-pixel rounded-lg hover:bg-cyan-400/20 hover:text-cyan-100 hover:shadow-[0_0_25px_rgba(0,255,255,0.5)] transition-all duration-300 hover:scale-105" // Tambahkan hover:scale dan efek warna teks
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-12 gap-16 items-center">
+          
+          {/* LEFT SIDE: TEXT CONTENT */}
+          <motion.div 
+            className="lg:col-span-7 text-left order-2 lg:order-1"
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 1, ease: "easeOut" }}
           >
-            VIEW PROJECTS
-          </a>
-          <a
-            href="#contact"
-            className="px-6 py-3 border border-pink-500 text-pink-400 font-pixel rounded-lg hover:bg-pink-500/20 hover:text-pink-100 hover:shadow-[0_0_25px_rgba(255,0,255,0.5)] transition-all duration-300 hover:scale-105" // Tambahkan hover:scale dan efek warna teks
-          >
-            CONTACT ME
-          </a>
-        </div>
-
-        {/* Indikator scroll dengan animasi */}
-        <div className="mt-20 animate-bounce animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-          <div className="flex flex-col items-center">
-            <span className="text-xs text-gray-500 font-pixel mb-1">SCROLL</span>
-            <svg
-              className="w-6 h-6 text-cyan-400"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            {/* ROLE TAG */}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false }}
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-4 mb-8"
             >
-              <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
+              <div className="w-10 h-[1px] bg-[#4A332C]"></div>
+              <p className="text-[#8D6E63] text-xs font-bold tracking-[0.4em] uppercase">
+                {hero.role}
+              </p>
+            </motion.div>
+
+            {/* MAIN HEADLINE */}
+            <h1 className="text-6xl md:text-8xl font-['Playfair_Display',serif] font-bold text-[#4A332C] leading-[1.05] mb-8">
+              {hero.name.split(' ')[0]} <br />
+              <span className="italic font-light text-[#A1887F] ml-12 md:ml-24">
+                {hero.name.split(' ').slice(1).join(' ')}
+              </span>
+            </h1>
+
+            {/* BIO */}
+            <p className="max-w-md text-[#795C53] text-lg font-light leading-relaxed mb-12 border-l-2 border-[#F5E6CA] pl-6 italic">
+              "{hero.bio}"
+            </p>
+
+            {/* CTA BUTTONS */}
+            <div className="flex flex-wrap gap-6 relative z-20">
+              <a
+                href="#projects"
+                className="group relative px-10 py-4 bg-[#4A332C] text-white text-[10px] font-bold tracking-[0.2em] uppercase overflow-hidden transition-all"
+              >
+                <span className="relative z-10">View Project</span>
+                <div className="absolute inset-0 bg-[#5D4037] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+              </a>
+              <a
+                href="#contact"
+                className="px-10 py-4 border border-[#4A332C] text-[#4A332C] text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-[#4A332C] hover:text-white transition-all"
+              >
+                Get In Touch
+              </a>
+            </div>
+          </motion.div>
+
+          {/* RIGHT SIDE: ARTISTIC IMAGE */}
+          <motion.div 
+            className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end"
+            initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+          >
+            <div className="relative group">
+              {/* Decorative Frame */}
+              <div className="absolute -top-6 -right-6 w-full h-full border border-[#D7CCC8] rounded-2xl group-hover:top-0 group-hover:right-0 transition-all duration-700"></div>
+              
+              {/* Profile Image Container */}
+              <div className="relative w-64 h-[400px] md:w-80 md:h-[500px] rounded-2xl overflow-hidden shadow-[30px_30px_60px_rgba(0,0,0,0.05)] grayscale hover:grayscale-0 transition-all duration-1000">
+                <img
+                  src={hero.avatar}
+                  alt={hero.name}
+                  className="w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-1000"
+                />
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
+
+      {/* SCROLL INDICATOR - Safely positioned at bottom right */}
+      <div className="absolute bottom-12 right-12 hidden lg:flex flex-col items-center gap-6">
+        <p className="text-[9px] tracking-[0.6em] font-bold text-[#4A332C] uppercase vertical-text opacity-40">Scroll</p>
+        <motion.div 
+          animate={{ y: [0, 15, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="w-[1px] h-20 bg-gradient-to-b from-[#4A332C] to-transparent opacity-30"
+        />
+      </div>
+
+      <style jsx>{`
+        .vertical-text {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+      `}</style>
     </section>
   );
 };
