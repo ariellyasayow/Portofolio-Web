@@ -1,16 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  
+  // TAMBAHAN: Gunakan useRef untuk mendeteksi apakah user sedang mengklik menu
+  const isClickScrolling = useRef(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
   useEffect(() => {
     const handleScroll = () => {
+      // JIKA USER KLIK MENU, ABAIKAN DETEKSI SCROLL SEMENTARA
+      if (isClickScrolling.current) return;
+
       const sections = ["home", "about", "projects", "skills", "contact"];
       const scrollPosition = window.scrollY;
 
@@ -39,11 +45,24 @@ export const Header = () => {
     const targetElement = document.getElementById(targetId);
 
     if (targetElement) {
+      // 1. Kunci scroll listener agar tidak mengganggu animasi
+      isClickScrolling.current = true;
+      
+      // 2. Langsung pindahkan indikator aktif ke tujuan akhir
+      setActiveSection(targetId);
+
+      // 3. Lakukan smooth scroll
       targetElement.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
+      
       if (menuOpen) closeMenu();
+
+      // 4. Buka kembali kunci scroll listener setelah animasi scroll selesai (sekitar 1 detik)
+      setTimeout(() => {
+        isClickScrolling.current = false;
+      }, 1000);
     }
   };
 
@@ -66,9 +85,8 @@ export const Header = () => {
         >
           <div className="relative">
             <span className="font-['Playfair_Display'] font-bold text-2xl text-[#4A332C] tracking-tighter">
-              A<span className="text-[#A1887F]">.</span>P
+              A<span className="text-[#A1887F]">.</span>S
             </span>
-            {/* Dekorasi garis kecil di bawah logo */}
             <div className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#4A332C] group-hover:w-full transition-all duration-500"></div>
           </div>
         </div>
@@ -91,7 +109,8 @@ export const Header = () => {
                   <motion.div
                     layoutId="activeTab"
                     className="absolute inset-0 bg-[#4A332C] rounded-full -z-10"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    // Transisi saya buat sedikit lebih smooth
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
                 {link.name}

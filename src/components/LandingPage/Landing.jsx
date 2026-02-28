@@ -53,12 +53,10 @@ export const Landing = ({ hero }) => {
               </p>
             </motion.div>
 
-            {/* MAIN HEADLINE */}
+            {/* MAIN HEADLINE - DIPERBAIKI (ATAS BAWAH, TEGAK, RATA KIRI) */}
             <h1 className="text-6xl md:text-8xl font-['Playfair_Display',serif] font-bold text-[#4A332C] leading-[1.05] mb-8">
               {hero.name.split(' ')[0]} <br />
-              <span className="italic font-light text-[#A1887F] ml-12 md:ml-24">
-                {hero.name.split(' ').slice(1).join(' ')}
-              </span>
+              {hero.name.split(' ').slice(1).join(' ')}
             </h1>
 
             {/* BIO */}
